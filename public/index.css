@@ -1,14 +1,40 @@
-#img {
-  display: block;
-  margin: auto;
-  height: 128px;
-  width: 128px;
-  padding: 2rem;
+label, input, select{
+    display: block; 
 }
 
-#canvas {
-  display: block;
-  margin: 2rem auto;
-  width: 540px;
-  height: 540px;
+select{
+    width: 100px;
 }
+
+.card {
+    height: 30px; 
+    width: 30px; 
+}
+
+.game-table{
+    width: 90vw;
+    height: 90vh;
+    background-color: rgb(162, 52, 11);
+    margin: 10px auto;
+    display: flex; 
+    justify-content: space-between;
+    
+}
+
+.upper-table{
+    position: absolute;
+    margin: 0 auto; 
+    width: 90vw;
+    height: 45vh;
+    background-color: green;
+    display: block; 
+}
+
+.lower-table{
+    position: absolute;
+    margin: 0 auto; 
+    width: 90vw;
+    height: 45vh;
+    background-color: blue;
+    display: block; 
+} 

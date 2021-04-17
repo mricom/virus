@@ -1,11 +1,7 @@
-/**
- * This file is just a silly example to show everything working in the browser.
- * When you're ready to start on your site, clear the file. Happy hacking!
- **/
+import {startGame} from './configure_game.mjs'
+import {Game} from './classes.mjs';
 
-import confetti from 'canvas-confetti';
+window.game = new Game();
 
-confetti.create(document.getElementById('canvas'), {
-  resize: true,
-  useWorker: true,
-})({ particleCount: 200, spread: 200 });
+startGame();
+
