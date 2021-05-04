@@ -14,7 +14,6 @@ export function configureGame(){
 export function turn(game){
     gf.emptyMain();
     main.append(gf.makeElemWithText('p', `It's ${game.players[game.playerTurn].name}'s turn!`, [['id', 'turn_message']]));
-    // gf.generateTable(game);
     main.append(gf.generateUserCardsMessages(game));
     main.append(gf.generatePossibleActionsButtons(game));
 }

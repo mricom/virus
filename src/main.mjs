@@ -1,38 +1,87 @@
-// import * as classes from './classes.mjs';
-// // import * as readline from 'readline';
-// import { Hand } from './classes.mjs';
+import * as cl from './classes.mjs';
+import { Card } from './classes.mjs';
 
-import { configureGame } from "./configure_game.mjs";
+const player1 = new cl.Player('Maria');
+const player2 = new cl.Player('Alex');
+const player3 = new cl.Player('Josep Lluis');
+let game = new cl.Game([player1, player2, player3]);
 
+console.log(
+  `Se han creado los usuarios ${game.players[0].name}, ${game.players[1].name} y ${game.players[2].name}.`,
+);
 
+game.initialDeal();
+console.log('Se han repartido las cartas.');
 
-// // const rl = readline.createInterface({
-// //     input: process.stdin,
-// //     output: process.stdout
-// // });
+function printTurn() {
+  let message = `Es el turno de ${game.players[game.playerTurn].name}.`;
+  for (let player of game.players) {
+    message += `\nCartas en la mano de ${player.name}: `;
+    for (let i = 0; i < player.handCards.length; i++) {
+      message += `${player.handCards[i].name}`;
+      if (i < player.handCards.length - 1) {
+        message += `,`;
+      }
+    }
+    message += `\nCartas en la mesa de ${player.name}:`;
+    for (let suit in player.boardCards) {
+      switch (suit) {
+        case 'H':
+          message += '\nCorazón: ';
+          break;
+        case 'W':
+          message += '\nComodín: ';
+          break;
+        case 'B':
+          message += '\nHueso: ';
+          break;
+        case 'C':
+          message += '\nCerebro: ';
+          break;
+        case 'S':
+          message += '\nEstómago: ';
+          break;
+      }
+      let cards = player.boardCards[suit];
+      for (let i = 0; i < cards.length; i++) {
+        message += `${cards[i].name}`;
+        if (i < cards.length - 1) {
+          message += `,`;
+        }
+      }
+    }
+  }
+  console.log('\n' + message);
+}
 
-// // function question(question_content) {
-// //     return new Promise(resolve => rl.question(question_content, answer => resolve(answer)))
-// // }
+let card = new Card('T', 'DH');
+let card2 = new Card('O', 'H');
+let card3 = new Card('V', 'H');
+let card4 = new Card('V', 'S');
 
-// async function getPlayers(){
-//     var players_number = await question("How many players in this game? Insert a number between 2 and 6: \n");
-//     while (isNaN(players_number) || players_number<1 || players_number>5){
-//         var players_number = await question("The input must be a number between 1 and 4: \n");
-//     }
-//     for(var i=0; i<players_number; i++){
-//         const player_name = await question(`Player ${i} name: `);
-//         const player = new classes.Player(player_name);
-//         players[i] = player;
-//     }
-//     rl.close();
+let card5 = new Card('O', 'C');
+
+// card2.isImmunized = true;
+let card6 = new Card('O', 'S');
+
+game.players[game.playerTurn].handCards[0] = card;
+// game.players[(game.playerTurn+1)%2].boardCards['H'].push(card2);
+
+// printTurn();
+// game.players[game.playerTurn].boardCards['H'].push(card3);
+// game.players[game.playerTurn].boardCards['H'].push(card4);
+// game.players[game.playerTurn].boardCards['C'].push(card5);
+// game.players[game.playerTurn].boardCards['S'].push(card6);
+
+printTurn();
+
+// try{
+//     game.infectOrgan((game.playerTurn+1)%2, 'H', 'H');
+// } catch (e){
+//     console.log(e);
 // }
 
-// function setGame(){
-//     var players = getPlayers();
-//     const deck = new classes.Deck();
-//     game = new Game(players, deck);
-//     return game
-// }
+// printTurn();
+// game.nextTurn();
 
-// const game = setGame();
+

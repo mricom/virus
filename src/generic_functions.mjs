@@ -8,7 +8,7 @@ export const makeElem = function(type){
 
 export const makeButton = function(text="", attributes=[]){
     const button = makeElem('button');
-    if (attributes.length != 0){
+    if (attributes.length !== 0){
         addAttributes(button, attributes);
     };
     button.append(document.createTextNode(text));
@@ -34,7 +34,7 @@ export const makeInputLabelled = function(label_text='', help_text='', input_att
     const input = makeElem('input');
     addAttributes(input, input_attributes);
     label.append(input);
-    if (help_text != ''){
+    if (help_text !== ''){
         label.append(makeElemWithText('small', help_text));
     }
     return label;
@@ -45,7 +45,7 @@ export const makeSelectLabelled = function(label_text='', help_text='', input_at
     const select = makeElem('select');
     addAttributes(select, input_attributes);
     label.append(select);
-    if (help_text != ''){
+    if (help_text !== ''){
         label.append(makeElemWithText('small', help_text));
     }
     return label;
@@ -145,26 +145,37 @@ export function generateHandCardsMessage(game){
 }
 
 export function generateBoardCardsMessageDiv(game){
-    const div = makeElemWithText('p', generateBoardCardsMessage(game));
-    addAttributes(div, [['id', 'hand_cards_p']])
-    return div;
+    const boardDiv = makeElem('div', '');
+    for(let i=0; i>game.players.length; i++ ){
+        let player = game.players[i];
+        if(player !== game.players[game.playerTurn]){
+            let cardsMessage = `Player ${player.name} has the following cards on the board: \n`;
+        }else{
+            let cardsMessage = `You have the following cards on the board: \n`;
+        }
+        const div = makeElemWithText('p', cardsMessage.concat(generateBoardCardsMessage(player)));
+        addAttributes(div, [['class', `hand_cards_${player}`]])
+    }
+    return boardDiv;
 }
 
-export function generateBoardCardsMessage(game){
-    let cardsMessage = 'The user has the following cards on the board: \n'; 
-    for(let card of game.players[game.playerTurn].boardCards){
-        cardsMessage += `${card.name},`
+export function generateBoardCardsMessage(player){
+    let cardsMessage; 
+    for(let cardType in player.boardCards){
+        for(let c of player.boardCards[cardType]){
+            cardsMessage += `${c.name},`;
+        }
     }
     return cardsMessage;
 }
 
 export function generatePossibleActionsButtons(game){
-    const actions = raf.getPossibleActions();
+    const actions = raf.getPlayerPossibleActions(game);
     const buttonsDiv = makeElemWithText('div', '', [['id', 'action_buttons_div']]);
         for(let i=0; i<actions.length; i++){
-        switch(actions[i][1]){
+        switch(i){
             case 0:
-                buttonsDiv.append(generatePassButton());
+                buttonsDiv.append(generatePassButton(actions[i]));
                 break;
             case 1:
                 buttonsDiv.append(generateDiscardButton());

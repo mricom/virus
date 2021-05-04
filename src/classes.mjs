@@ -1,183 +1,388 @@
 // const families = {
-//     'Organ': 'O', 
-//     'Virus': 'V', 
+//     'Organ': 'O',
+//     'Virus': 'V',
 //     'Medecine': 'M',
 //     'Treatment': 'T'};
-// const organNames = {
-//     'Wildcard': 'W', 
-//     'Heart': 'H', 
-//     'Stomach': 'S', 
+// const suitsNames = {
+//     'Wildcard': 'W',
+//     'Heart': 'H',
+//     'Stomach': 'S',
 //     'Brain': 'C',  //Cerebrum = 'C'
 //     'Bone': 'B'}
 // const tratment_names = {
-//     'Spread virus': 'SV', 
-//     'Steal organ': 'SO', 
+//     'Spread virus': 'SV',
+//     'Steal organ': 'SO',
 //     'Exchange organ': 'EO',
-//     'Discard hand': 'DH',
-//     'Exchange hand': 'EH',
+//     'Discard Hand Cards': 'DH',
+//     'Exchange Board Hand': 'EB',
 // }
 
 const families = [
-    'O',    //Organ
-    'V',    //Virus
-    'M',    //Medecine
-    'T'
-];   //Treatment
-const organNames = [
-    'W',    //Wildcard 
-    'H',    //Heart 
-    'S',    //Stomach 
-    'C',    //Cerebrum(Brain)
-    'B'
-];   //Bone
-const trreatmentNames = [
-    'SV',   //Spread Virus 
-    'SO',   //Steal Organ 
-    'EO',   //Exchange Organ
-    'DH',   //Discard Hand
-    'EH',   //Exchange Hand
+  'O', //Organ
+  'V', //Virus
+  'M', //Medecine
+  'T', //Treatment
+];
+const suitsNames = [
+  'W', //Wildcard
+  'H', //Heart
+  'S', //Stomach
+  'C', //Cerebrum(Brain)
+  'B', //Bone
+];
+const treatmentNames = [
+  'SV', //Spread Virus
+  'SO', //Steal Organ
+  'EO', //Exchange Organ
+  'DH', //Discard Hands
+  'EB', //Exchange Board Cards
 ];
 
-
 export class Card {
-    constructor(family, value) {
-        this.value=value; 
-        this.family=family;
-        this.is_visible = false;
-    }
+  constructor(family, suit) {
+    this.suit = suit;
+    this.family = family;
+    this.isImmunized = false;
+  }
 
-    flip(){ this.is_visible == 'True'}
-    get name(){ return this.family.concat(this.value);}
+  get name() {
+    return this.family.concat(this.suit);
+  }
 }
-
 
 export class Player {
-    constructor(player_name){
-        this.name = player_name;
-        this.handCards = [];
-        this.boardCards = [];
-    }
-
-    discardCard(card){
-        for(let i=0; i<this.handCards.length; i++){
-            if(this.handCards[i].name === card){
-                this.handCards.splice(i, 1);
-            }
-        }
-    }
-
-    addHandCard(card){
-        this.handCards.push(card);
-    }
+  constructor(player_name) {
+    this.name = player_name;
+    this.handCards = [];
+    this.boardCards = {
+      W: [],
+      H: [],
+      S: [],
+      C: [],
+      B: [],
+    };
+  }
 }
 
-export class Deck{
-    constructor(){ 
-        this.availableCards = [];
-        this.usedCards = [];
-        this.createNew();
-        this.shuffle();
-    }
+export class Deck {
+  constructor() {
+    this.availableCards = [];
+    this.usedCards = [];
+    this.createNew();
+    this.shuffle();
+  }
 
-    createNew(){
-        this.availableCards = [];
-        for (var family of families){
-            switch(family){
-            case 'T':
-                for(var treatment of trreatmentNames){
-                    switch (treatment){
-                    case 'SV':
-                        for(var i=0; i<2; i++){
-                            this.availableCards.push(new Card(family, treatment));
-                        }
-                        break; 
-                    case 'SO': 
-                        for(var i=0; i<3; i++){
-                            this.availableCards.push(new Card(family, treatment));
-                        }
-                        break;
-                    case 'EO':
-                        for(var i=0; i<3; i++){
-                            this.availableCards.push(new Card(family, treatment));
-                        } 
-                        break;
-                    case 'DH':
-                        this.availableCards.push(new Card(family, treatment));
-                        break; 
-                    case 'EH': 
-                        this.availableCards.push(new Card(family, treatment));
-                        break; 
-                    }
+  createNew() {
+    this.availableCards = [];
+    for (let family of families) {
+      switch (family) {
+        case 'T':
+          for (let treatment of treatmentNames) {
+            switch (treatment) {
+              case 'SV':
+                for (let i = 0; i < 2; i++) {
+                  this.availableCards.push(new Card(family, treatment));
                 }
-                
                 break;
-            case 'O':
-                for(var organ of organNames){
-                    if(organ == 'W'){
-                        this.availableCards.push(new Card(family, organ));
-                    } else {
-                        for(var i = 0; i<5; i++){
-                            this.availableCards.push(new Card(family, organ));
-                        }
-                    }
+              case 'SO':
+                for (let i = 0; i < 3; i++) {
+                  this.availableCards.push(new Card(family, treatment));
                 }
-                break; 
-            case 'M': 
-                for(var organ of organNames){
-                    for(var i = 0; i<4; i++){
-                        this.availableCards.push(new Card(family, organ));
-                    }
+                break;
+              case 'EO':
+                for (let i = 0; i < 3; i++) {
+                  this.availableCards.push(new Card(family, treatment));
                 }
-                break; 
-            case 'V': 
-                for(var organ of organNames){
-                    if(organ == 'W'){
-                        this.availableCards.push(new Card(family, organ));
-                    } else {
-                        for(var i = 0; i<4; i++){
-                            this.availableCards.push(new Card(family, organ));
-                        }
-                    }
-                }
+                break;
+              case 'DH':
+                this.availableCards.push(new Card(family, treatment));
+                break;
+              case 'EB':
+                this.availableCards.push(new Card(family, treatment));
+                break;
             }
-        }
-    }
+          }
 
-    shuffle(){
-        var availableCardsLength = this.availableCards.length;
-        for (var i=0; i<availableCardsLength; i++){
-            var j = Math.floor(Math.random() * availableCardsLength);
-            var aux = this.availableCards[i];
-            this.availableCards[i] = this.availableCards[j];
-            this.availableCards[j] = aux;
-        }
-    }
-
-    shuffleCardsLeft(){
-        this.availableCards = this.availableCards.concat(this.usedCards);
-        this.shuffle();
-    }
-
-    initialDeal(players){
-        for(var j=0; j<3; j++){
-            for(var i=0; i<players.length; i++){
-                players[i].handCards[j] = this.deal();
+          break;
+        case 'O':
+          for (let organ of suitsNames) {
+            if (organ == 'W') {
+              this.availableCards.push(new Card(family, organ));
+            } else {
+              for (let i = 0; i < 5; i++) {
+                this.availableCards.push(new Card(family, organ));
+              }
             }
-        }
+          }
+          break;
+        case 'M':
+          for (let organ of suitsNames) {
+            for (let i = 0; i < 4; i++) {
+              this.availableCards.push(new Card(family, organ));
+            }
+          }
+          break;
+        case 'V':
+          for (let organ of suitsNames) {
+            if (organ == 'W') {
+              this.availableCards.push(new Card(family, organ));
+            } else {
+              for (let i = 0; i < 4; i++) {
+                this.availableCards.push(new Card(family, organ));
+              }
+            }
+          }
+      }
     }
+  }
 
-    deal(){
-        return this.availableCards.pop();
+  shuffle() {
+    let availableCardsLength = this.availableCards.length;
+    for (let i = 0; i < availableCardsLength; i++) {
+      let j = Math.floor(Math.random() * availableCardsLength);
+      let aux = this.availableCards[i];
+      this.availableCards[i] = this.availableCards[j];
+      this.availableCards[j] = aux;
     }
+  }
+
+  shuffleCardsLeft() {
+    this.availableCards = this.availableCards.concat(this.usedCards);
+    this.shuffle();
+  }
+
+  checkAvailableCards() {
+    if (this.availableCards.length === 0) {
+      this.shuffleCardsLeft();
+    }
+  }
+
+  dealOneCard() {
+    this.checkAvailableCards();
+    const card = this.availableCards.pop();
+    return card;
+  }
 }
 
 export class Game {
-    constructor (init_player){
-        this.players = [];
-        this.deck = new Deck();
-        this.playerTurn = 0;
-        this.finished = false;
+  constructor(players) {
+    this.players = players;
+    this.deck = new Deck();
+    this.playerTurn = 0;
+    this.finished = false;
+    this.winner = null;
+  }
+
+  initialDeal() {
+    this.players.forEach((player, index) => this.getMissingCards(index));
+  }
+
+  getMissingCards(player) {
+    for (let i = this.players[player].handCards.length; i < 3; i++) {
+      this.players[player].handCards.push(this.deck.dealOneCard());
     }
-    
-    nextTurn(){this.playerTurn = (this.playerTurn+1)%this.players.length; return this.playerTurn;}
+  }
+
+  nextTurn() {
+    this.playerTurn = (this.playerTurn + 1) % this.players.length;
+    return this;
+  }
+
+  discardHandCard(playerIndex, card) {
+    let index = this.players[playerIndex].handCards.indexOf(card);
+    if (index === -1) {
+      return false;
+    }
+    this.deck.usedCards.push(this.players[playerIndex].handCards[index]);
+    this.players[playerIndex].handCards.splice(index, 1);
+    return true;
+  }
+
+  discardSelectedHandCards(playerIndex, cards) {
+    for (let card of cards) {
+      this.discardHandCard(playerIndex, card);
+    }
+    this.getMissingCards(player);
+    return this;
+  }
+
+  discardAllHandCards(playerIndex) {
+    this.deck.usedCards = this.deck.usedCards.concat(
+      this.players[playerIndex].handCards
+    );
+    this.players[playerIndex].handCards = [];
+  }
+
+  discardAllOthersHandCards() {
+    let currentPlayer = this.players[this.playerTurn];
+    if (
+      currentPlayer.handCards.filter((card) => card.suit === 'DH').length === 0
+    ) {
+      throw new Error([404, `You don't have this card.`]);
+    }
+    this.players.forEach((player,index) => {
+      if(index!==this.playerTurn){this.discardAllHandCards(index)}
+      });
+  }
+
+  discardBoardSuit(playerIndex, suit) {
+    let player = this.players[playerIndex];
+    for (let card of player.boardCards[suit]) {
+      this.deck.usedCards.push(card);
+    }
+    this.boardCards[suit] = [];
+    return this;
+  }
+
+  // removeHandCard(playerIndex, card){
+  //     let player = this.players[playerIndex];
+  //     let index = player.handCards.indexOf(card);
+  //     player.handCards.splice(index, 1);
+  //     this.getMissingCards(playerIndex);
+  //     return this;
+  // }
+
+  exchangeBoardCards(targetPlayerIndex) {
+    let currentPlayer = this.players[this.playerTurn];
+    let targetPlayer = this.players[targetPlayerIndex];
+    if (
+      currentPlayer.handCards.filter((card) => card.suit === 'EB').length === 0
+    ) {
+      throw new Error([404, `You don't have this card.`]);
+    } else if (currentPlayer === targetPlayer) {
+      throw new Error([101, `You can't exchange hands with yourself.`]);
+    } else {
+      let aux = targetPlayer.boardCards;
+      targetPlayer.boardCards = currentPlayer.boardCards;
+      currentPlayer.boardCards = aux;
+      this.discardSelectedHandCards(this.playerTurn, [
+        currentPlayer.handCards.filter((card) => card.suit == 'EB')[0],
+      ]);
+    }
+    return this;
+  }
+
+  exchangeOrgan(targetPlayerIndex, targetCardSuit, cardSuit) {
+    let currentPlayer = this.players[this.playerTurn];
+    let targetPlayer = this.players[targetPlayerIndex];
+    if (
+      currentPlayer.handCards.filter((card) => card.suit === 'EO').length === 0
+    ) {
+      throw new Error([404, `You don't have this card,`]);
+    } else if (targetPlayer.boardCards[targetCardSuit].length === 0) {
+      throw new Error([
+        81,
+        `The player ${targetPlayer.name} doesn't have this organ on its board.`,
+      ]);
+    } else if (currentPlayer.boardCards[cardSuit].length === 0) {
+      throw new Error([82, `You don't have this organ on your board.`]);
+    } else if (
+      currentPlayer.boardCards[cardSuit].filter(
+        (card) => card.family === 'O',
+      )[0].isImmunized
+    ) {
+      throw new Error([85, `You can't exchange an immunized organ.`]);
+    } else if (
+      targetPlayer.boardCards[targetCardSuit].filter(
+        (card) => card.family === 'O',
+      )[0].isImmunized
+    ) {
+      throw new Error([
+        86,
+        `You can't exchange an organ for a player's immunized organ.`,
+      ]);
+    } else if (targetCardSuit !== cardSuit) {
+      if (currentPlayer.boardCards[targetCardSuit].length !== 0) {
+        throw new Error([87, `You already have the organ you are asking for.`]);
+      } else if (targetPlayer.boardCards[cardSuit].length !== 0) {
+        throw new Error([
+          87,
+          `The player ${targetPlayer.name} already has the organ you want to change.`,
+        ]);
+      }
+    } else {
+      let aux = targetPlayer.boardCards[targetCardSuit];
+      this.discardBoardSuit(targetPlayerIndex, targetCardSuit);
+      targetPlayer.boardCards[cardSuit] = currentPlayer.boardCards[cardSuit];
+      this.discardBoardSuit(this.playerTurn, cardSuit);
+      currentPlayer.boardCards[targetCardSuit] = aux;
+      this.discardSelectedHandCards(this.playerTurn, [
+        currentPlayer.handCards.filter((card) => card.suit == 'EO')[0],
+      ]);
+    }
+    return this;
+  }
+
+  stealOrgan(targetPlayerIndex, targetCardSuit) {
+    let currentPlayer = this.players[this.playerTurn];
+    let targetPlayer = this.players[targetPlayerIndex];
+    if (
+      currentPlayer.handCards.filter((card) => card.suit === 'SO').length === 0
+    ) {
+      throw new Error([404, `You don't have this card,`]);
+    } else if (targetPlayer.boardCards[targetCardSuit].length === 0) {
+      throw new Error([
+        111,
+        `The player ${targetPlayer.name} doesn't have this organ on its board.`,
+      ]);
+    } else if (
+      targetPlayer.boardCards[targetCardSuit].filter(
+        (card) => card.family === 'O',
+      )[0].isImmunized
+    ) {
+      throw new Error([112, `You can't steal a player's immunized organ.`]);
+    } else if (currentPlayer.boardCards[targetCardSuit].length !== 0) {
+      throw new Error([113, `You already have the organ you want to steal.`]);
+    }
+    let organsCounter = 0;
+    for (let suit in currentPlayer.boardCards) {
+      if (currentPlayer.boardCards[suit].length !== 0) {
+        organsCounter++;
+      }
+    }
+    if (organsCounter === 4) {
+      throw new Error([113, `You already have 4 organs in your board.`]);
+    }
+    currentPlayer.boardCards[targetCardSuit] =
+      targetPlayer.boardCards[targetCardSuit];
+    targetPlayer.boardCards[targetCardSuit] = [];
+    this.discardSelectedHandCards(this.playerTurn, [
+      currentPlayer.handCards.filter((card) => card.suit == 'SO')[0],
+    ]);
+  }
+
+  // spreadVirus(targetPlayers, targetCardSuit) {
+  //   let currentPlayer = this.players[this.playerTurn];
+  //   if (
+  //     currentPlayer.handCards.filter((card) => card.suit === 'SO').length === 0
+  //   ) {
+  //     throw new Error([404, "You don't have this card."]);
+  //   }
+  // }
+
+  infectOrgan(targetPlayerIndex, targetCardSuit, cardSuit) {
+    let currentPlayer = this.players[this.playerTurn];
+    let cards = currentPlayer.handCards.filter((card) => card.family === 'V');
+    let targetPlayer = this.players[targetPlayerIndex];
+    if (cards.length === 0) {
+      throw new Error([404, `You don't have this card,`]);
+    } else if (targetPlayer.boardCards[targetCardSuit].length === 0) {
+      throw new Error([
+        31,
+        `The player ${targetPlayer.name} doesn't have this organ on its board.`,
+      ]);
+    } else if (cardSuit !== 'W' && cardSuit !== targetCardSuit) {
+      throw new Error([32, `Only matching virus can infect this organ.`]);
+    } else if (
+      targetPlayer.boardCards[targetCardSuit].filter(
+        (card) => card.family === 'O',
+      )[0].isImmunized
+    ) {
+      throw new Error([33, `You can't infect a player's immunized organ.`]);
+    }
+    switch (targetPlayer.boardCards[targetCardSuit].length) {
+      case 1:
+        break;
+    }
+  }
 }
