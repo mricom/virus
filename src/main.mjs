@@ -56,18 +56,19 @@ function printTurn() {
 
 let card = new Card('T', 'DH');
 let card2 = new Card('O', 'H');
-let card3 = new Card('V', 'H');
-let card4 = new Card('V', 'S');
+let card3 = new Card('M', 'H');
+let card4 = new Card('M', 'H');
 
 let card5 = new Card('O', 'C');
 
 // card2.isImmunized = true;
 let card6 = new Card('O', 'S');
 
-game.players[game.playerTurn].handCards[0] = card;
-// game.players[(game.playerTurn+1)%2].boardCards['H'].push(card2);
+game.players[game.playerTurn].handCards[0] = card3;
+game.players[(game.playerTurn+1)%3].boardCards['H'].push(card2);
+game.players[(game.playerTurn+1)%3].boardCards['H'].push(card4);
 
-// printTurn();
+
 // game.players[game.playerTurn].boardCards['H'].push(card3);
 // game.players[game.playerTurn].boardCards['H'].push(card4);
 // game.players[game.playerTurn].boardCards['C'].push(card5);
@@ -75,13 +76,14 @@ game.players[game.playerTurn].handCards[0] = card;
 
 printTurn();
 
-// try{
-//     game.infectOrgan((game.playerTurn+1)%2, 'H', 'H');
-// } catch (e){
-//     console.log(e);
-// }
+try{
+    game.cureOrgan((game.playerTurn+1)%3, 'H', 'H');
+} catch (e){
+    console.log(e);
+}
 
-// printTurn();
+printTurn();
+console.log(game.deck.usedCards);
 // game.nextTurn();
 
 
